@@ -1,3 +1,5 @@
+from tabulate import tabulate
+
 n = int(input("Enter number of students: "))
 
 M={}
@@ -98,29 +100,73 @@ for name in H:
         G[name] = round(tp / tc, 2)
 
 
-## 🎓 Student Marks Card
+print("\n")
+print("=" * 80)
+print("STUDENT MARKS CARD".center(80))
+print("=" * 80)
 
-**Student Name:** Rahul
+for name in M:
 
-| Subject | Internal | External | Total | Result | Grade | Grade Point | Credit |
-|:---------|---------:|---------:|------:|:------:|:-----:|------------:|-------:|
-| Maths | 55 | 35 | 90 | Pass | O | 10 | 4 |
-| Physics | 48 | 26 | 74 | Pass | A | 8 | 3 |
-| Chemistry | 40 | 22 | 62 | Pass | B | 7 | 3 |
-| Biology | 56 | 37 | 93 | Pass | O | 10 | 4 |
-| Python | 51 | 35 | 86 | Pass | A+ | 9 | 2 |
+    print("\nStudent Name :", name)
+    print()
 
-| Summary | Value |
-|:--------|:------|
-| Total Marks | **405 / 500** |
-| Percentage | **81.00%** |
-| SGPA | **8.94** |
-| Overall Result | **PASS ✅** |
+    table = []
 
-print("Total Credits: ", sum(c))
+    for i in range(5):
+        table.append([
+            S[i],
+            E[name][i],
+            M[name][i][0],
+            M[name][i][1],
+            T[name][i],
+            R[name][i],
+            L[name][i],
+            H[name][i]
+        ])
 
-print("\nSGPA")
-for name in G:
-    print(name, ":", G[name])
+    print(tabulate(
+        table,
+        headers=[
+            "Subject",
+            "Credit",
+            "Internal",
+            "External",
+            "Total",
+            "Remark",
+            "Grade",
+            "Honor Points"
+        ],
+        tablefmt="grid"
+    ))
+
+print()
+
+print("Total Marks     :", sum(T[name]), "/ 500")
+print("Percentage      : {:.2f}%".format(sum(T[name]) / 5))
+print("Credits Earned  :", sum(E[name]), "/", sum(c))
+print("SGPA            : {:.2f}".format(G[name]))
+
+if "F" in R[name]:
+    print("Overall Result  : FAIL")
+else:
+    print("Overall Result  : PASS")
+
+print("=" * 80)
 
 rank = sorted(G.items(), key=lambda x: x[1], reverse=True)
+
+print("\n")
+print("=" * 40)
+print("COLLEGE RANK LIST".center(40))
+print("=" * 40)
+
+rank_table = []
+
+for i, (name, sgpa) in enumerate(rank, start=1):
+    rank_table.append([i, name, sgpa])
+
+print(tabulate(
+    rank_table,
+    headers=["Rank", "Student Name", "SGPA"],
+    tablefmt="grid"
+))
